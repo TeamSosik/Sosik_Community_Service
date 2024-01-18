@@ -1,0 +1,62 @@
+server:
+  port: 9005
+
+file:
+  location: ${FILE_UPLOAD}
+
+spring:
+
+  servlet:
+    multipart:
+      max-file-size: 20MB
+
+  cloud:
+    config:
+      discovery:
+        enabled: true
+  application:
+    name: community-service
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+      settings:
+        web-allow-others: true
+  datasource:
+#         h2
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+
+    #mysql
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:10000/sosik?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+#    username: test1
+#    password: test1
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+    defer-datasource-initialization: true
+    generate-ddl: true
+  config:
+    import: "optional:configserver:"
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: test1234
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+
