@@ -1,9 +1,12 @@
 package com.example.sosikcommunityservice.service;
 
+import com.example.sosikcommunityservice.dto.request.RequestCreatePost;
+import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetComment;
 import com.example.sosikcommunityservice.dto.response.ResponseGetPost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
-import com.example.sosikcommunityservice.model.entity.CommentEntity;
+import com.example.sosikcommunityservice.exception.ApplicationException;
+import com.example.sosikcommunityservice.exception.ErrorCode;
 import com.example.sosikcommunityservice.model.entity.PostEntity;
 import com.example.sosikcommunityservice.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +17,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
+
     private final PostRepository postRepository;
+
+    @Override
+    public String createPost(Long memberId, RequestCreatePost postDTO) {
+        PostEntity postentity = PostEntity.builder()
+                .memberId(postDTO.memberId())
+                .title(postDTO.title())
+                .content(postDTO.content())
+                .build();
+        postRepository.save(postentity);
+        return "게시글 등록이 완료 되었습니다.";
+    }
 
     @Override
     public List<ResponseGetPostList> getPostList() {
@@ -30,7 +44,7 @@ public class PostServiceImpl implements PostService {
                         entity.getTitle(),
                         entity.getHits(),
                         entity.getCreatedAt()
-                        ))
+                ))
                 .collect(Collectors.toList());
     }
 
@@ -63,6 +77,30 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
+    @Transactional
+    public Void updatePost(Long postId, RequestUpdatePost updatePost) {
+        Optional<PostEntity> postEntityOptional = postRepository.findById(postId);
+
+
+//        if (postEntityOptional.isPresent()) {
+//            PostEntity postEntity = postEntityOptional.get();
+//
+//            if (updatePost.title() != null) {
+//                postEntity.setTitle(updatePost.title());
+//            }
+//        }
+        return null;
+    }
+
+    @Override
+    public String deletePost(Long postId) {
+        if (postRepository.findById(postId) == null) {
+            throw new ApplicationException(ErrorCode.POST_NOT_FOUND);
+        }
+        postRepository.deleteById(postId);
+        return "게시글 삭제가 완료 되었습니다.";
+    }
 
 
 }
