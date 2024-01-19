@@ -15,7 +15,7 @@ public class CommentEntity extends AuditingFields {
 
     @ManyToOne
     @JoinColumn(name = "community_id", nullable = false)
-    private CommunityEntity community;
+    private PostEntity community;
 
     @Column(nullable = false)
     private Long memberId;
