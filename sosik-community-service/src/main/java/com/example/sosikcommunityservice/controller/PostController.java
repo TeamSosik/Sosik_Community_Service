@@ -1,6 +1,7 @@
 package com.example.sosikcommunityservice.controller;
 
 import com.example.sosikcommunityservice.dto.request.RequestCreatePost;
+import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetPost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
 import com.example.sosikcommunityservice.dto.response.Result;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -20,7 +20,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("/createpost")
+    @PostMapping("/create")
     public Result<Void> createPost(@RequestHeader Long memberId, @RequestBody RequestCreatePost post) {
         postService.createPost(memberId, post);
         return Result.success();
@@ -38,13 +38,14 @@ public class PostController {
         return Result.success(responseGetpost);
     }
 
-    @PatchMapping("/updatepost")
-    public Result<Void> updatePost() {
+    @PatchMapping("/{postId}")
+    public Result<Void> updatePost(@PathVariable Long postId, @RequestBody final RequestUpdatePost updatepost) {
+        postService.updatePost(postId, updatepost);
         return Result.success();
     }
 
     @DeleteMapping("/{postId}")
-    public Result<Void> deletePost(@PathVariable final Long postId) {
+    public Result<Void> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return Result.success();
     }
