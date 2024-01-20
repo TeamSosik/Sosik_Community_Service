@@ -1,5 +1,6 @@
 package com.example.sosikcommunityservice.model.entity;
 
+import com.example.sosikcommunityservice.dto.request.RequestUpdateComment;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,11 +26,12 @@ public class CommentEntity extends AuditingFields {
 
     @Builder
     public CommentEntity(
+            final PostEntity community,
             final Long memberId,
             final String content
     ) {
+        this.community = community;
         this.memberId = memberId;
         this.content = content;
-
     }
 }
