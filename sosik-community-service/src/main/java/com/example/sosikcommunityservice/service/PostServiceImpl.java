@@ -24,14 +24,14 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
-    public String createPost(Long memberId, RequestCreatePost postDTO) {
+    public Void createPost(Long memberId, RequestCreatePost postDTO) {
         PostEntity postentity = PostEntity.builder()
                 .memberId(postDTO.memberId())
                 .title(postDTO.title())
                 .content(postDTO.content())
                 .build();
         postRepository.save(postentity);
-        return "게시글 등록이 완료 되었습니다.";
+        return null;
     }
 
     @Override
@@ -82,24 +82,37 @@ public class PostServiceImpl implements PostService {
     public Void updatePost(Long postId, RequestUpdatePost updatePost) {
         Optional<PostEntity> postEntityOptional = postRepository.findById(postId);
 
+        if (postEntityOptional.isPresent()) {
+            PostEntity postEntity = postEntityOptional.get();
 
-//        if (postEntityOptional.isPresent()) {
-//            PostEntity postEntity = postEntityOptional.get();
-//
-//            if (updatePost.title() != null) {
-//                postEntity.setTitle(updatePost.title());
-//            }
-//        }
+            if (!updatePost.memberId().equals(postEntity.getMemberId())) {
+                throw new ApplicationException(ErrorCode.UNAUTHORIZED_UPDATE);
+            }
+
+            postEntity = PostEntity.builder()
+                    .id(postEntity.getId())
+                    .memberId(postEntity.getMemberId())
+                    .title(updatePost.title())
+                    .content(updatePost.content())
+                    .hits(postEntity.getHits())
+                    .comments(postEntity.getComments())
+                    .build();
+
+            postRepository.save(postEntity);
+        } else {
+            throw new ApplicationException(ErrorCode.POST_NOT_FOUND);
+        }
         return null;
     }
 
+
     @Override
-    public String deletePost(Long postId) {
+    public Void deletePost(Long postId) {
         if (postRepository.findById(postId) == null) {
             throw new ApplicationException(ErrorCode.POST_NOT_FOUND);
         }
         postRepository.deleteById(postId);
-        return "게시글 삭제가 완료 되었습니다.";
+        return null;
     }
 
 
