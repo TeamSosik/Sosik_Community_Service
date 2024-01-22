@@ -16,6 +16,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/post/v1")
+@CrossOrigin
 public class PostController {
 
     private final PostService postService;

@@ -38,13 +38,15 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public List<ResponseGetPostList> getPostList() {
-        List<PostEntity> postEntities = postRepository.findAll();
+        List<PostEntity> postEntities = postRepository.findAllByOrderByCreatedAtDesc();
 
         return postEntities.stream()
                 .map(entity -> new ResponseGetPostList(
+                        entity.getId(),
                         entity.getMemberId(),
                         entity.getTitle(),
                         entity.getHits(),
+                        entity.getComments().size(),
                         entity.getCreatedAt()
                 ))
                 .collect(Collectors.toList());
