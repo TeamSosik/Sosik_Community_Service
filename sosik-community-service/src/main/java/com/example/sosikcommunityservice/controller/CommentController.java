@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/comment/v1")
+@CrossOrigin
 public class CommentController {
     private final CommentService commentService;
 
