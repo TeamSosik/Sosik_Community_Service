@@ -11,7 +11,7 @@ public record ResponseGetPost(
         Long memberId,
         String title,
         String content,
-        Long hits,
+        Integer hits,
         LocalDateTime createdAt,
         List<ResponseGetComment> comments
 

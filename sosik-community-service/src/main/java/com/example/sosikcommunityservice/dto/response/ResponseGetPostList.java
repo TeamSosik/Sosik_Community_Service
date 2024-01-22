@@ -9,8 +9,8 @@ public record ResponseGetPostList(
         Long id,
         Long memberId,
         String title,
-        Long hits,
+        Integer hits,
         Integer commentCount,
         LocalDateTime createdAt
-   ) {
+) {
 }

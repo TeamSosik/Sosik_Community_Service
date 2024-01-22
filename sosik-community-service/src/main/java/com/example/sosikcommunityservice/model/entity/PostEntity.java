@@ -1,5 +1,6 @@
 package com.example.sosikcommunityservice.model.entity;
 
+import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,13 +33,13 @@ public class PostEntity extends AuditingFields {
     @Column(nullable = false)
     private Long memberId;
 
-    @Column(length = 255,nullable = false)
+    @Column(length = 255, nullable = false)
     private String title;
 
     @Column(length = 3000, nullable = false)
     private String content;
 
-    private Long hits;
+    private Integer hits;
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
@@ -49,7 +50,7 @@ public class PostEntity extends AuditingFields {
             final Long memberId,
             final String title,
             final String content,
-            final Long hits,
+            final Integer hits,
             final List<CommentEntity> comments
     ) {
         this.id = id;
@@ -57,6 +58,11 @@ public class PostEntity extends AuditingFields {
         this.title = title;
         this.content = content;
         this.hits = hits;
-        this.comments=comments;
+        this.comments = comments;
+    }
+
+    public void updatePost(RequestUpdatePost requestUpdatePost) {
+        this.title = requestUpdatePost.title();
+        this.content = requestUpdatePost.content();
     }
 }
