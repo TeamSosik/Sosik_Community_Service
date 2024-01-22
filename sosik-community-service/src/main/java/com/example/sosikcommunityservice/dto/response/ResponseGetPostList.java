@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public record ResponseGetPostList(
         Long memberId,
         String title,
-        Long hits,
+        Integer hits,
         LocalDateTime createdAt
-   ) {
+) {
 }
