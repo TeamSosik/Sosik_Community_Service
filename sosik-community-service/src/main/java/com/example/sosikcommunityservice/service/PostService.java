@@ -8,13 +8,13 @@ import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
 import java.util.List;
 
 public interface PostService {
-    Void createPost(Long memberId, RequestCreatePost postDTO);
+    void createPost(Long memberId, RequestCreatePost postDTO);
 
     List<ResponseGetPostList> getPostList();
 
     ResponseGetPost getPost(Long postId);
 
-    Void updatePost(Long postId, RequestUpdatePost updatepost);
+    void updatePost(Long postId, RequestUpdatePost updatepost);
 
-    Void deletePost(Long postId);
+    void deletePost(Long postId);
 }

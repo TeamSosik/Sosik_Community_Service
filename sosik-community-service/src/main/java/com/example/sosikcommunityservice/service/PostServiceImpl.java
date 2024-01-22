@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
@@ -24,17 +25,18 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
-    public Void createPost(Long memberId, RequestCreatePost postDTO) {
+    public void createPost(Long memberId, RequestCreatePost postDTO) {
         PostEntity postentity = PostEntity.builder()
                 .memberId(postDTO.memberId())
                 .title(postDTO.title())
                 .content(postDTO.content())
+                .hits(0)
                 .build();
         postRepository.save(postentity);
-        return null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResponseGetPostList> getPostList() {
         List<PostEntity> postEntities = postRepository.findAll();
 
@@ -78,41 +80,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Transactional
-    public Void updatePost(Long postId, RequestUpdatePost updatePost) {
-        Optional<PostEntity> postEntityOptional = postRepository.findById(postId);
-
-        if (postEntityOptional.isPresent()) {
-            PostEntity postEntity = postEntityOptional.get();
-
-            if (!updatePost.memberId().equals(postEntity.getMemberId())) {
-                throw new ApplicationException(ErrorCode.UNAUTHORIZED_UPDATE);
-            }
-
-            postEntity = PostEntity.builder()
-                    .id(postEntity.getId())
-                    .memberId(postEntity.getMemberId())
-                    .title(updatePost.title())
-                    .content(updatePost.content())
-                    .hits(postEntity.getHits())
-                    .comments(postEntity.getComments())
-                    .build();
-
-            postRepository.save(postEntity);
-        } else {
-            throw new ApplicationException(ErrorCode.POST_NOT_FOUND);
-        }
-        return null;
+    public void updatePost(Long postId, RequestUpdatePost updatePost) {
+        PostEntity postEntity = postRepository.findById(postId).orElseThrow(() -> {
+            return new ApplicationException(ErrorCode.UNAUTHORIZED_UPDATE);
+        });
+        postEntity.updatePost(updatePost);
     }
 
-
     @Override
-    public Void deletePost(Long postId) {
+    public void deletePost(Long postId) {
         if (postRepository.findById(postId) == null) {
             throw new ApplicationException(ErrorCode.POST_NOT_FOUND);
         }
         postRepository.deleteById(postId);
-        return null;
     }
 
 
