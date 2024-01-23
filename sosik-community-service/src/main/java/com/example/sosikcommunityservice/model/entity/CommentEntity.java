@@ -1,6 +1,7 @@
 package com.example.sosikcommunityservice.model.entity;
 
-import com.example.sosikcommunityservice.dto.request.RequestUpdateComment;
+import com.example.sosikcommunityservice.dto.request.RequestCreateComment;
+import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,5 +34,24 @@ public class CommentEntity extends AuditingFields {
         this.community = community;
         this.memberId = memberId;
         this.content = content;
+    }
+
+    public static CommentEntity create(RequestCreateComment createComment, PostEntity postEntity, Long memberId){
+        CommentEntity commentEntity = CommentEntity.builder()
+                .community(postEntity)
+                .memberId(memberId)
+                .content(createComment.content())
+                .build();
+        return commentEntity;
+    }
+
+    public static ResponseCreateComment responseCreate(CommentEntity commentEntity) {
+        ResponseCreateComment responseComment = ResponseCreateComment.builder()
+                .id(commentEntity.getId())
+                .memberId(commentEntity.getMemberId())
+                .content(commentEntity.getContent())
+                .createdAt(commentEntity.getCreatedAt())
+                .build();
+        return responseComment;
     }
 }
