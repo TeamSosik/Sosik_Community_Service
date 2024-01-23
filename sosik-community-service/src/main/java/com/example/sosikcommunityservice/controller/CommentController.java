@@ -1,6 +1,7 @@
 package com.example.sosikcommunityservice.controller;
 
 import com.example.sosikcommunityservice.dto.request.RequestCreateComment;
+import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
 import com.example.sosikcommunityservice.dto.response.Result;
 import com.example.sosikcommunityservice.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,14 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/create")
-    public Result<Void> createComment(@RequestHeader Long memberId,@RequestBody RequestCreateComment comment) {
-        commentService.createComment(memberId,comment);
+    public Result<ResponseCreateComment> createComment(@RequestHeader Long memberId, @RequestBody RequestCreateComment comment) {
+        ResponseCreateComment responseCreateComment = commentService.createComment(memberId,comment);
+        return Result.success(responseCreateComment);
+    }
+
+    @DeleteMapping("/{commentId}")
+    public Result<Void> deleteComment(@PathVariable Long commentId){
+        commentService.deleteComment(commentId);
         return Result.success();
     }
 
