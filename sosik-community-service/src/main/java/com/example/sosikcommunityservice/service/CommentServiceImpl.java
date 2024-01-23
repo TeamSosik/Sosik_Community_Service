@@ -1,6 +1,7 @@
 package com.example.sosikcommunityservice.service;
 
 import com.example.sosikcommunityservice.dto.request.RequestCreateComment;
+import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
 import com.example.sosikcommunityservice.exception.ApplicationException;
 import com.example.sosikcommunityservice.exception.ErrorCode;
 import com.example.sosikcommunityservice.model.entity.CommentEntity;
@@ -18,18 +19,22 @@ public class CommentServiceImpl implements CommentService {
     private final PostRepository postRepository;
     @Transactional
     @Override
-    public void createComment(Long memberId,RequestCreateComment commentDTO) {
+    public ResponseCreateComment createComment(Long memberId, RequestCreateComment commentDTO) {
         PostEntity postEntity = postRepository.findById(commentDTO.communityId()).orElseThrow(() -> {
             return new ApplicationException(ErrorCode.POST_NOT_FOUND);
         });
-
-        CommentEntity commentEntity = CommentEntity.builder()
-                .community(postEntity)
-                .memberId(memberId)
-                .content(commentDTO.content())
-                .build();
+        CommentEntity commentEntity = CommentEntity.create(commentDTO, postEntity, memberId);
 
         commentRepository.save(commentEntity);
+
+        ResponseCreateComment responseComment = CommentEntity.responseCreate(commentEntity);
+
+        return responseComment;
     }
 
+    @Transactional
+    @Override
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
+    }
 }
