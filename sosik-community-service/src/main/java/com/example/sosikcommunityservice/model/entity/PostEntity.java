@@ -1,10 +1,15 @@
 package com.example.sosikcommunityservice.model.entity;
 
 import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
+import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
+import com.example.sosikcommunityservice.dto.response.ResponseGetComment;
+import com.example.sosikcommunityservice.dto.response.ResponseGetPost;
+import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -64,5 +69,44 @@ public class PostEntity extends AuditingFields {
     public void updatePost(RequestUpdatePost requestUpdatePost) {
         this.title = requestUpdatePost.title();
         this.content = requestUpdatePost.content();
+    }
+
+    public Integer plushit(Integer hits) {
+        this.hits = hits + 1;
+        return hits;
+    }
+
+    public static ResponseGetPost responseGetPost(PostEntity postEntity) {
+        return new ResponseGetPost(
+                postEntity.getMemberId(),
+                postEntity.getTitle(),
+                postEntity.getContent(),
+                postEntity.plushit(postEntity.getHits()),
+                postEntity.getCreatedAt(),
+                postEntity.getComments().stream()
+                        .map(commentEntity -> {
+                            return ResponseGetComment.builder()
+                                    .id(commentEntity.getId())
+                                    .communityId(postEntity.getId())
+                                    .memberId(commentEntity.getMemberId())
+                                    .content(commentEntity.getContent())
+                                    .createdAt(commentEntity.getCreatedAt())
+                                    .build();
+                        })
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public static List<ResponseGetPostList> responseGetPostList(List<PostEntity> postEntities){
+        return postEntities.stream()
+                .map(entity -> new ResponseGetPostList(
+                        entity.getId(),
+                        entity.getMemberId(),
+                        entity.getTitle(),
+                        entity.getHits(),
+                        entity.getComments().size(),
+                        entity.getCreatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 }
