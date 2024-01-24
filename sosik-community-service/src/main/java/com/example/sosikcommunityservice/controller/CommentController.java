@@ -1,6 +1,7 @@
 package com.example.sosikcommunityservice.controller;
 
 import com.example.sosikcommunityservice.dto.request.RequestCreateComment;
+import com.example.sosikcommunityservice.dto.request.RequestUpdateComment;
 import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
 import com.example.sosikcommunityservice.dto.response.Result;
 import com.example.sosikcommunityservice.service.CommentService;
@@ -19,6 +20,12 @@ public class CommentController {
     public Result<ResponseCreateComment> createComment(@RequestHeader Long memberId, @RequestBody RequestCreateComment comment) {
         ResponseCreateComment responseCreateComment = commentService.createComment(memberId,comment);
         return Result.success(responseCreateComment);
+    }
+
+    @PatchMapping("/{commentId}")
+    public Result<String> updateComment(@PathVariable Long commentId,@RequestBody final RequestUpdateComment comment) {
+        commentService.updateComment(commentId,comment);
+        return Result.success(comment.content());
     }
 
     @DeleteMapping("/{commentId}")

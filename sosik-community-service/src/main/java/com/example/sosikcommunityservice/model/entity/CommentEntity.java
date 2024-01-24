@@ -1,6 +1,7 @@
 package com.example.sosikcommunityservice.model.entity;
 
 import com.example.sosikcommunityservice.dto.request.RequestCreateComment;
+import com.example.sosikcommunityservice.dto.request.RequestUpdateComment;
 import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,5 +54,9 @@ public class CommentEntity extends AuditingFields {
                 .createdAt(commentEntity.getCreatedAt())
                 .build();
         return responseComment;
+    }
+
+    public void updateComment(RequestUpdateComment updateComment) {
+        this.content = updateComment.content();
     }
 }

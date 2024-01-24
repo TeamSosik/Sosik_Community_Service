@@ -1,6 +1,7 @@
 package com.example.sosikcommunityservice.service;
 
 import com.example.sosikcommunityservice.dto.request.RequestCreateComment;
+import com.example.sosikcommunityservice.dto.request.RequestUpdateComment;
 import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
 import com.example.sosikcommunityservice.exception.ApplicationException;
 import com.example.sosikcommunityservice.exception.ErrorCode;
@@ -30,6 +31,16 @@ public class CommentServiceImpl implements CommentService {
         ResponseCreateComment responseComment = CommentEntity.responseCreate(commentEntity);
 
         return responseComment;
+    }
+
+    @Transactional
+    @Override
+    public RequestUpdateComment updateComment(Long commentId, RequestUpdateComment commentDTO) {
+        CommentEntity commentEntity = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
+
+        commentEntity.updateComment(commentDTO);
+        return commentDTO;
     }
 
     @Transactional
