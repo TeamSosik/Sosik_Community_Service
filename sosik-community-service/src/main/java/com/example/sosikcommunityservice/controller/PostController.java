@@ -27,8 +27,9 @@ public class PostController {
         return Result.success();
     }
 
-    @GetMapping
+    @GetMapping("/")
     public Result<List<ResponseGetPostList>> getPostList() {
+        System.out.println("=============================================");
         List<ResponseGetPostList> responseGetPostList = postService.getPostList();
         return Result.success(responseGetPostList);
     }
