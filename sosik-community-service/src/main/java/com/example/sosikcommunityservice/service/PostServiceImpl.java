@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void createPost(Long memberId, RequestCreatePost postDTO) {
         PostEntity postentity = PostEntity.builder()
-                .memberId(postDTO.memberId())
+                .memberId(memberId)
                 .title(postDTO.title())
                 .content(postDTO.content())
                 .hits(0)
