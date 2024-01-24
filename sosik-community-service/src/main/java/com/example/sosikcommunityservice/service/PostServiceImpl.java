@@ -68,6 +68,7 @@ public class PostServiceImpl implements PostService {
                     postEntity.getComments().stream()
                             .map(commentEntity -> {
                                 return ResponseGetComment.builder()
+                                        .id(commentEntity.getId())
                                         .communityId(postEntity.getId())
                                         .memberId(commentEntity.getMemberId())
                                         .content(commentEntity.getContent())

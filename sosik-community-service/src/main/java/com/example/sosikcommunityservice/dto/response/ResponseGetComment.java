@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ResponseGetComment(
+        Long id,
         Long communityId,
         Long memberId,
         String content,
