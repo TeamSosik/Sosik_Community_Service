@@ -40,46 +40,18 @@ public class PostServiceImpl implements PostService {
     public List<ResponseGetPostList> getPostList() {
         List<PostEntity> postEntities = postRepository.findAllByOrderByCreatedAtDesc();
 
-        return postEntities.stream()
-                .map(entity -> new ResponseGetPostList(
-                        entity.getId(),
-                        entity.getMemberId(),
-                        entity.getTitle(),
-                        entity.getHits(),
-                        entity.getComments().size(),
-                        entity.getCreatedAt()
-                ))
-                .collect(Collectors.toList());
+        return PostEntity.responseGetPostList(postEntities);
     }
 
     @Override
     public ResponseGetPost getPost(Long postId) {
         Optional<PostEntity> postEntityOptional = postRepository.findById(postId);
-
-        if (postEntityOptional.isPresent()) {
-            PostEntity postEntity = postEntityOptional.get();
-
-            return new ResponseGetPost(
-                    postEntity.getMemberId(),
-                    postEntity.getTitle(),
-                    postEntity.getContent(),
-                    postEntity.getHits(),
-                    postEntity.getCreatedAt(),
-                    postEntity.getComments().stream()
-                            .map(commentEntity -> {
-                                return ResponseGetComment.builder()
-                                        .id(commentEntity.getId())
-                                        .communityId(postEntity.getId())
-                                        .memberId(commentEntity.getMemberId())
-                                        .content(commentEntity.getContent())
-                                        .createdAt(commentEntity.getCreatedAt())
-                                        .build();
-                            })
-                            .collect(Collectors.toList())
-            );
-        } else {
+        if (postEntityOptional.isEmpty()){
             return null;
         }
+
+        PostEntity postEntity = postEntityOptional.get();
+        return PostEntity.responseGetPost(postEntity);
     }
 
     @Override
