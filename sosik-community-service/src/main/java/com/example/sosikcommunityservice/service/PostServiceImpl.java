@@ -1,5 +1,6 @@
 package com.example.sosikcommunityservice.service;
 
+import com.example.sosikcommunityservice.dto.request.GetPostSliceCondition;
 import com.example.sosikcommunityservice.dto.request.RequestCreatePost;
 import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetComment;
@@ -10,6 +11,10 @@ import com.example.sosikcommunityservice.exception.ErrorCode;
 import com.example.sosikcommunityservice.model.entity.PostEntity;
 import com.example.sosikcommunityservice.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +42,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResponseGetPostList> getPostList() {
-        List<PostEntity> postEntities = postRepository.findAllByOrderByCreatedAtDesc();
+    public Slice<ResponseGetPostList> getPostListSlice(GetPostSliceCondition condition) {
+        Pageable pageable = PageRequest.of(condition.getPage(), condition.getSize());
+        Slice<PostEntity> postSlice = postRepository.findAllByOrderByIdDesc(pageable);
 
-        return PostEntity.responseGetPostList(postEntities);
+        List<ResponseGetPostList> responseGetPostList = postSlice.getContent().stream()
+                .map(ResponseGetPostList::responseGetPostList)
+                .collect(Collectors.toList());
+
+        return new SliceImpl<>(responseGetPostList, pageable, postSlice.hasNext());
     }
 
     @Override

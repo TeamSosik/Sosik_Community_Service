@@ -7,6 +7,7 @@ import com.example.sosikcommunityservice.dto.response.ResponseGetPost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +43,7 @@ public class PostEntity extends AuditingFields {
     private String title;
 
     @Column(length = 3000, nullable = false)
+    @Lob
     private String content;
 
     private Integer hits;
@@ -95,18 +97,5 @@ public class PostEntity extends AuditingFields {
                         })
                         .collect(Collectors.toList())
         );
-    }
-
-    public static List<ResponseGetPostList> responseGetPostList(List<PostEntity> postEntities){
-        return postEntities.stream()
-                .map(entity -> new ResponseGetPostList(
-                        entity.getId(),
-                        entity.getMemberId(),
-                        entity.getTitle(),
-                        entity.getHits(),
-                        entity.getComments().size(),
-                        entity.getCreatedAt()
-                ))
-                .collect(Collectors.toList());
     }
 }

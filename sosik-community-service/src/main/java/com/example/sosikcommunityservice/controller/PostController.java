@@ -1,5 +1,6 @@
 package com.example.sosikcommunityservice.controller;
 
+import com.example.sosikcommunityservice.dto.request.GetPostSliceCondition;
 import com.example.sosikcommunityservice.dto.request.RequestCreatePost;
 import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetPost;
@@ -8,17 +9,14 @@ import com.example.sosikcommunityservice.dto.response.Result;
 import com.example.sosikcommunityservice.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/post/v1")
-@CrossOrigin
 public class PostController {
-
     private final PostService postService;
 
     @PostMapping("/create")
@@ -27,10 +25,9 @@ public class PostController {
         return Result.success();
     }
 
-    @GetMapping("/")
-    public Result<List<ResponseGetPostList>> getPostList() {
-        System.out.println("=============================================");
-        List<ResponseGetPostList> responseGetPostList = postService.getPostList();
+    @GetMapping
+    public Result<Slice<ResponseGetPostList>> getPostList(GetPostSliceCondition condition) {
+        Slice<ResponseGetPostList> responseGetPostList = postService.getPostListSlice(condition);
         return Result.success(responseGetPostList);
     }
 
