@@ -8,6 +8,8 @@ import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.ReadOnlyProperty;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,9 +90,20 @@ public class PostEntity extends AuditingFields {
                 postEntity.getCreatedAt(),
                 postEntity.getComments().stream()
                         .map(commentEntity -> {
+                            String finalUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:9000/members/v1/"+commentEntity.getMemberId())
+                                    .build()
+                                    .toUriString();
+                            WebClient webClient = WebClient.create();
+                            // GET 요청 보내기
+                            String leaveNickname = webClient.get()
+                                    .uri(finalUrl)
+                                    .retrieve()
+                                    .bodyToMono(String.class)
+                                    .block();
                             return ResponseGetComment.builder()
                                     .id(commentEntity.getId())
                                     .communityId(postEntity.getId())
+                                    .nickname(leaveNickname)
                                     .memberId(commentEntity.getMemberId())
                                     .content(commentEntity.getContent())
                                     .createdAt(commentEntity.getCreatedAt())

@@ -46,10 +46,11 @@ public class CommentEntity extends AuditingFields {
         return commentEntity;
     }
 
-    public static ResponseCreateComment responseCreate(CommentEntity commentEntity) {
+    public static ResponseCreateComment responseCreate(CommentEntity commentEntity,String nickname) {
         ResponseCreateComment responseComment = ResponseCreateComment.builder()
                 .id(commentEntity.getId())
                 .memberId(commentEntity.getMemberId())
+                .nickname(nickname)
                 .content(commentEntity.getContent())
                 .createdAt(commentEntity.getCreatedAt())
                 .build();
