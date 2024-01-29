@@ -78,9 +78,10 @@ public class PostEntity extends AuditingFields {
         return hits;
     }
 
-    public static ResponseGetPost responseGetPost(PostEntity postEntity) {
+    public static ResponseGetPost responseGetPost(PostEntity postEntity,String nickname) {
         return new ResponseGetPost(
                 postEntity.getMemberId(),
+                nickname,
                 postEntity.getTitle(),
                 postEntity.getContent(),
                 postEntity.plushit(postEntity.getHits()),

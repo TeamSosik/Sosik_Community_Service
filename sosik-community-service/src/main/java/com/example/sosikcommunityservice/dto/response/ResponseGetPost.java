@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public record ResponseGetPost(
         Long memberId,
+        String nickname,
         String title,
         String content,
         Integer hits,
