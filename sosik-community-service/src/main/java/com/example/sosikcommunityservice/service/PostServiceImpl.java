@@ -17,6 +17,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +63,17 @@ public class PostServiceImpl implements PostService {
         }
 
         PostEntity postEntity = postEntityOptional.get();
-        return PostEntity.responseGetPost(postEntity);
+        String finalUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:9000/members/v1/"+postEntity.getMemberId())
+                .build()
+                .toUriString();
+        WebClient webClient = WebClient.create();
+        // GET 요청 보내기
+        String nickname = webClient.get()
+                .uri(finalUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        return PostEntity.responseGetPost(postEntity,nickname);
     }
 
     @Override
