@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public record ResponseGetComment(
         Long id,
         Long communityId,
+        String nickname,
         Long memberId,
         String content,
         LocalDateTime createdAt

@@ -12,6 +12,8 @@ import com.example.sosikcommunityservice.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @Service
@@ -28,7 +30,18 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepository.save(commentEntity);
 
-        ResponseCreateComment responseComment = CommentEntity.responseCreate(commentEntity);
+        String finalUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:9000/members/v1/"+memberId)
+                .build()
+                .toUriString();
+        WebClient webClient = WebClient.create();
+        // GET 요청 보내기
+        String nickname = webClient.get()
+                .uri(finalUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        ResponseCreateComment responseComment = CommentEntity.responseCreate(commentEntity,nickname);
 
         return responseComment;
     }
