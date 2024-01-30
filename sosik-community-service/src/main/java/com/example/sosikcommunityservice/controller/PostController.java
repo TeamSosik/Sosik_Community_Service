@@ -26,8 +26,8 @@ public class PostController {
     }
 
     @GetMapping
-    public Result<Slice<ResponseGetPostList>> getPostList(GetPostSliceCondition condition) {
-        Slice<ResponseGetPostList> responseGetPostList = postService.getPostListSlice(condition);
+    public Result<Slice<ResponseGetPostList>> getPostListSearch(GetPostSliceCondition condition) {
+        Slice<ResponseGetPostList> responseGetPostList = postService.getPostListSliceSearch(condition);
         return Result.success(responseGetPostList);
     }
 
