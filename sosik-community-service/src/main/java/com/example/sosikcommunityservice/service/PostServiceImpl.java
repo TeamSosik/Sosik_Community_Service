@@ -56,6 +56,26 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Slice<ResponseGetPostList> getPostListSliceSearch(GetPostSliceCondition condition) {
+        Pageable pageable = PageRequest.of(condition.getPage(), condition.getSize());
+
+        // 검색어를 사용하여 게시물을 가져옴
+        Slice<PostEntity> postSlice = postRepository.findByContentOrderByIdDesc(condition.getSearchKeyword(), pageable);
+
+        System.out.println(condition.getSearchKeyword());
+        System.out.println(condition.getPage());
+        System.out.println(postSlice.getContent());
+        // 게시물을 ResponseGetPostList로 변환
+        List<ResponseGetPostList> responseGetPostList = postSlice.getContent().stream()
+                .map(ResponseGetPostList::responseGetPostList)
+                .collect(Collectors.toList());
+
+        // 변환한 결과를 SliceImpl로 감싸서 반환
+        return new SliceImpl<>(responseGetPostList, pageable, postSlice.hasNext());
+    }
+
+    @Override
     public ResponseGetPost getPost(Long postId) {
         Optional<PostEntity> postEntityOptional = postRepository.findById(postId);
         if (postEntityOptional.isEmpty()){
