@@ -12,6 +12,7 @@ public record ResponseGetPostList(
         Long id,
         Long memberId,
         String nickname,
+        String profileImage,
         String title,
         Integer hits,
         Integer commentCount,
@@ -23,15 +24,16 @@ public record ResponseGetPostList(
                 .toUriString();
         WebClient webClient = WebClient.create();
         // GET 요청 보내기
-        String nickname = webClient.get()
+        ResponseGetMember responseGetMember = webClient.get()
                 .uri(finalUrl)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(ResponseGetMember.class)
                 .block();
         return  new ResponseGetPostList(
                 postEntity.getId(),
                 postEntity.getMemberId(),
-                nickname,
+                responseGetMember.nickname(),
+                responseGetMember.profileImage(),
                 postEntity.getTitle(),
                 postEntity.getHits(),
                 postEntity.getComments().size(),

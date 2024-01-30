@@ -9,6 +9,7 @@ public record ResponseCreateComment(
         Long id,
         Long memberId,
         String nickname,
+        String profileImage,
         String content,
         LocalDateTime createdAt
 ) {

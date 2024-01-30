@@ -1,10 +1,7 @@
 package com.example.sosikcommunityservice.model.entity;
 
 import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
-import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
-import com.example.sosikcommunityservice.dto.response.ResponseGetComment;
-import com.example.sosikcommunityservice.dto.response.ResponseGetPost;
-import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
+import com.example.sosikcommunityservice.dto.response.*;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.ReadOnlyProperty;
@@ -80,10 +77,11 @@ public class PostEntity extends AuditingFields {
         return hits;
     }
 
-    public static ResponseGetPost responseGetPost(PostEntity postEntity,String nickname) {
+    public static ResponseGetPost responseGetPost(PostEntity postEntity, ResponseGetMember responseGetMember) {
         return new ResponseGetPost(
                 postEntity.getMemberId(),
-                nickname,
+                responseGetMember.nickname(),
+                responseGetMember.profileImage(),
                 postEntity.getTitle(),
                 postEntity.getContent(),
                 postEntity.plushit(postEntity.getHits()),
@@ -95,15 +93,16 @@ public class PostEntity extends AuditingFields {
                                     .toUriString();
                             WebClient webClient = WebClient.create();
                             // GET 요청 보내기
-                            String leaveNickname = webClient.get()
+                            ResponseGetMember leaveMember = webClient.get()
                                     .uri(finalUrl)
                                     .retrieve()
-                                    .bodyToMono(String.class)
+                                    .bodyToMono(ResponseGetMember.class)
                                     .block();
                             return ResponseGetComment.builder()
                                     .id(commentEntity.getId())
                                     .communityId(postEntity.getId())
-                                    .nickname(leaveNickname)
+                                    .nickname(leaveMember.nickname())
+                                    .profileImage(leaveMember.profileImage())
                                     .memberId(commentEntity.getMemberId())
                                     .content(commentEntity.getContent())
                                     .createdAt(commentEntity.getCreatedAt())
