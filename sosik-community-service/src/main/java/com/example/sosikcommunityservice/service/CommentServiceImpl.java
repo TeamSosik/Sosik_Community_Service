@@ -3,6 +3,7 @@ package com.example.sosikcommunityservice.service;
 import com.example.sosikcommunityservice.dto.request.RequestCreateComment;
 import com.example.sosikcommunityservice.dto.request.RequestUpdateComment;
 import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
+import com.example.sosikcommunityservice.dto.response.ResponseGetMember;
 import com.example.sosikcommunityservice.exception.ApplicationException;
 import com.example.sosikcommunityservice.exception.ErrorCode;
 import com.example.sosikcommunityservice.model.entity.CommentEntity;
@@ -35,13 +36,13 @@ public class CommentServiceImpl implements CommentService {
                 .toUriString();
         WebClient webClient = WebClient.create();
         // GET 요청 보내기
-        String nickname = webClient.get()
+        ResponseGetMember responseGetMember = webClient.get()
                 .uri(finalUrl)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(ResponseGetMember.class)
                 .block();
 
-        ResponseCreateComment responseComment = CommentEntity.responseCreate(commentEntity,nickname);
+        ResponseCreateComment responseComment = CommentEntity.responseCreate(commentEntity,responseGetMember);
 
         return responseComment;
     }
