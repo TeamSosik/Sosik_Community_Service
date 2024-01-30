@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
     private final PostService postService;
 
-    @PostMapping("/create")
+    @PostMapping
     public Result<Void> createPost(@RequestHeader Long memberId, @RequestBody RequestCreatePost post) {
         postService.createPost(memberId, post);
         return Result.success();
