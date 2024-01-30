@@ -4,6 +4,7 @@ import com.example.sosikcommunityservice.dto.request.GetPostSliceCondition;
 import com.example.sosikcommunityservice.dto.request.RequestCreatePost;
 import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetComment;
+import com.example.sosikcommunityservice.dto.response.ResponseGetMember;
 import com.example.sosikcommunityservice.dto.response.ResponseGetPost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
 import com.example.sosikcommunityservice.exception.ApplicationException;
@@ -68,12 +69,12 @@ public class PostServiceImpl implements PostService {
                 .toUriString();
         WebClient webClient = WebClient.create();
         // GET 요청 보내기
-        String nickname = webClient.get()
+        ResponseGetMember responseGetMember = webClient.get()
                 .uri(finalUrl)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(ResponseGetMember.class)
                 .block();
-        return PostEntity.responseGetPost(postEntity,nickname);
+        return PostEntity.responseGetPost(postEntity,responseGetMember);
     }
 
     @Override

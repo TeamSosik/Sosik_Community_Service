@@ -10,6 +10,7 @@ import java.util.List;
 public record ResponseGetPost(
         Long memberId,
         String nickname,
+        String profileImage,
         String title,
         String content,
         Integer hits,
