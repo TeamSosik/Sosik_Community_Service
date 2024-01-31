@@ -14,7 +14,6 @@ import reactor.netty.http.client.HttpClient;
 import java.time.Duration;
 import java.util.function.Function;
 
-
 @Configuration
 public class WebClientConfig {
     @Bean

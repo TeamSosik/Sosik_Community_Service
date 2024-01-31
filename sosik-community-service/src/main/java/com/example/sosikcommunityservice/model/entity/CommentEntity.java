@@ -46,18 +46,6 @@ public class CommentEntity extends AuditingFields {
                 .build();
     }
 
-    public static ResponseCreateComment responseCreate(CommentEntity commentEntity, ResponseGetMember responseGetMember) {
-        ResponseCreateComment responseComment = ResponseCreateComment.builder()
-                .id(commentEntity.getId())
-                .memberId(commentEntity.getMemberId())
-                .nickname(responseGetMember.nickname())
-                .profileImage(responseGetMember.profileImage())
-                .content(commentEntity.getContent())
-                .createdAt(commentEntity.getCreatedAt())
-                .build();
-        return responseComment;
-    }
-
     public void updateComment(RequestUpdateComment updateComment) {
         this.content = updateComment.content();
     }

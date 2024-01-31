@@ -1,6 +1,5 @@
 package com.example.sosikcommunityservice.repository.querycustom;
 
-import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
 import com.example.sosikcommunityservice.model.entity.PostEntity;
 import com.example.sosikcommunityservice.model.entity.QPostEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class PostRepositoryCustomImpl implements PostRepositoryCustom {
-
     private final JPAQueryFactory jpaQueryFactory;
     QPostEntity postEntity = QPostEntity.postEntity;
 

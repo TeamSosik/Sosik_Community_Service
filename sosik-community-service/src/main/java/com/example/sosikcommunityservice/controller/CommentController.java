@@ -33,5 +33,4 @@ public class CommentController {
         commentService.deleteComment(commentId);
         return Result.success();
     }
-
 }

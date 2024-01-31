@@ -12,7 +12,6 @@ import java.util.List;
 public interface PostService {
     void createPost(Long memberId, RequestCreatePost postDTO);
     ResponseGetPost getPost(Long postId);
-    Slice<ResponseGetPostList> getPostListSlice(GetPostSliceCondition condition);
     Slice<ResponseGetPostList> getPostListSliceSearch(GetPostSliceCondition condition);
     void updatePost(Long postId, RequestUpdatePost updatepost);
     void deletePost(Long postId);
