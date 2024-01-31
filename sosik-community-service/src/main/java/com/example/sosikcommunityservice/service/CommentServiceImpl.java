@@ -3,6 +3,7 @@ package com.example.sosikcommunityservice.service;
 import com.example.sosikcommunityservice.dto.request.RequestCreateComment;
 import com.example.sosikcommunityservice.dto.request.RequestUpdateComment;
 import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
+import com.example.sosikcommunityservice.dto.response.ResponseGetMember;
 import com.example.sosikcommunityservice.exception.ApplicationException;
 import com.example.sosikcommunityservice.exception.ErrorCode;
 import com.example.sosikcommunityservice.model.entity.CommentEntity;
@@ -20,45 +21,46 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+
     @Transactional
     @Override
     public ResponseCreateComment createComment(Long memberId, RequestCreateComment commentDTO) {
-        PostEntity postEntity = postRepository.findById(commentDTO.communityId()).orElseThrow(() -> {
-            return new ApplicationException(ErrorCode.POST_NOT_FOUND);
-        });
-        CommentEntity commentEntity = CommentEntity.create(commentDTO, postEntity, memberId);
+        PostEntity postEntity = postRepository.findById(commentDTO.communityId())
+                .orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
+        CommentEntity commentEntity = CommentEntity.create(commentDTO, postEntity, memberId);
         commentRepository.save(commentEntity);
 
         String finalUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:9000/members/v1/"+memberId)
                 .build()
                 .toUriString();
         WebClient webClient = WebClient.create();
+
         // GET 요청 보내기
-        String nickname = webClient.get()
+        ResponseGetMember responseGetMember = webClient.get()
                 .uri(finalUrl)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(ResponseGetMember.class)
                 .block();
 
-        ResponseCreateComment responseComment = CommentEntity.responseCreate(commentEntity,nickname);
-
-        return responseComment;
+        return ResponseCreateComment.responseCreate(commentEntity,responseGetMember);
     }
 
     @Transactional
     @Override
-    public RequestUpdateComment updateComment(Long commentId, RequestUpdateComment commentDTO) {
+    public void updateComment(Long commentId, RequestUpdateComment commentDTO) {
         CommentEntity commentEntity = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
 
         commentEntity.updateComment(commentDTO);
-        return commentDTO;
     }
 
     @Transactional
     @Override
     public void deleteComment(Long commentId) {
+        CommentEntity commentEntity = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
+
         commentRepository.deleteById(commentId);
     }
 }

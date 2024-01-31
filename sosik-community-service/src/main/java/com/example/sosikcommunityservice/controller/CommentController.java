@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/create")
+    @PostMapping
     public Result<ResponseCreateComment> createComment(@RequestHeader Long memberId, @RequestBody RequestCreateComment comment) {
         ResponseCreateComment responseCreateComment = commentService.createComment(memberId,comment);
         return Result.success(responseCreateComment);
@@ -33,5 +33,4 @@ public class CommentController {
         commentService.deleteComment(commentId);
         return Result.success();
     }
-
 }

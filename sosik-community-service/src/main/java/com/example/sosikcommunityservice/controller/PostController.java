@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
     private final PostService postService;
 
-    @PostMapping("/create")
+    @PostMapping
     public Result<Void> createPost(@RequestHeader Long memberId, @RequestBody RequestCreatePost post) {
         postService.createPost(memberId, post);
         return Result.success();
     }
 
     @GetMapping
-    public Result<Slice<ResponseGetPostList>> getPostList(GetPostSliceCondition condition) {
-        Slice<ResponseGetPostList> responseGetPostList = postService.getPostListSlice(condition);
+    public Result<Slice<ResponseGetPostList>> getPostListSearch(GetPostSliceCondition condition) {
+        Slice<ResponseGetPostList> responseGetPostList = postService.getPostListSliceSearch(condition);
         return Result.success(responseGetPostList);
     }
 

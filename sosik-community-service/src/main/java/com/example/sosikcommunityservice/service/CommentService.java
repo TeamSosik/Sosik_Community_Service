@@ -6,6 +6,6 @@ import com.example.sosikcommunityservice.dto.response.ResponseCreateComment;
 
 public interface CommentService {
     ResponseCreateComment createComment(Long memberId, RequestCreateComment commentDTO);
-    RequestUpdateComment updateComment(Long commentId, RequestUpdateComment commentDTO);
+    void updateComment(Long commentId, RequestUpdateComment commentDTO);
     void deleteComment(Long commentId);
 }
