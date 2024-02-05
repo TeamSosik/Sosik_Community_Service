@@ -7,6 +7,7 @@ import com.example.sosikcommunityservice.dto.response.ResponseGetPost;
 import com.example.sosikcommunityservice.dto.response.ResponseGetPostList;
 import com.example.sosikcommunityservice.dto.response.Result;
 import com.example.sosikcommunityservice.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
@@ -26,7 +27,7 @@ public class PostController {
     }
 
     @GetMapping
-    public Result<Slice<ResponseGetPostList>> getPostListSearch(GetPostSliceCondition condition) {
+    public Result<Slice<ResponseGetPostList>> getPostListSearch(@Valid GetPostSliceCondition condition) {
         Slice<ResponseGetPostList> responseGetPostList = postService.getPostListSliceSearch(condition);
         return Result.success(responseGetPostList);
     }

@@ -2,14 +2,22 @@ package com.example.sosikcommunityservice.model.entity;
 
 import com.example.sosikcommunityservice.dto.request.RequestCreatePost;
 import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
-import com.example.sosikcommunityservice.dto.response.*;
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -19,9 +27,6 @@ import java.util.stream.Collectors;
         indexes = {
                 @Index(
                         name = "idx_community_title", columnList = "title", unique = false
-                ),
-                @Index(
-                        name = "idx_community_content", columnList = "content", unique = false
                 ),
                 @Index(
                         name = "idx_community_writer", columnList = "memberId", unique = false
@@ -41,7 +46,7 @@ public class PostEntity extends AuditingFields {
     @Column(length = 255, nullable = false)
     private String title;
 
-    @Column(length = 3000, nullable = false)
+    @Column(nullable = false)
     @Lob
     private String content;
 
