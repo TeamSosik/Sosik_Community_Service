@@ -33,7 +33,7 @@ public record ResponseGetPost(
               postEntity.getCreatedAt(),
               postEntity.getComments().stream()
                       .map(commentEntity -> {
-                         String finalUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:9000/members/v1/"+commentEntity.getMemberId())
+                         String finalUrl = UriComponentsBuilder.fromHttpUrl("http://43.200.224.252:9000/members/v1/"+commentEntity.getMemberId())
                                  .build()
                                  .toUriString();
                          WebClient webClient = WebClient.create();

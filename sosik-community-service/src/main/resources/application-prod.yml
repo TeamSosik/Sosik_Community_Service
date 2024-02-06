@@ -2,13 +2,13 @@ server:
   port: 9005
 
 file:
-  location: /home/ubuntu/build/file
+  location: ${FILE_UPLOAD}
+
 spring:
-  jackson:
-    time-zone: Asia/Seoul
+
   servlet:
     multipart:
-      max-file-size: 500MB
+      max-file-size: 20MB
 
   cloud:
     config:
@@ -23,16 +23,16 @@ spring:
       settings:
         web-allow-others: true
   datasource:
-##         h2
+    #         h2
 #    driver-class-name: org.h2.Driver
 #    url: jdbc:h2:mem:testdb
 #    username: sa
 
     #mysql
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://regionforseoul.cfuukai6usfo.ap-northeast-2.rds.amazonaws.com:3306/sosik?serverTimezone=Asia/Seoul
-    username: sosik
-    password: test1234
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://172.20.0.9:10000/sosik?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+      username: test1
+      password: test1
 
   jpa:
     show-sql: true
@@ -40,6 +40,10 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
+        dialect=org:
+          hibernate:
+            dialect:
+              MySQLDialect:
         format_sql: true
         use_sql_comments: true
     defer-datasource-initialization: true
@@ -48,17 +52,14 @@ spring:
     import: "optional:configserver:"
   data:
     redis:
-      host: 127.0.0.1
+      host: 172.20.0.6
       port: 6379
       password: test1234
-  web:
-    locale: ko_KR
-eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://43.200.224.252:8761/eureka
+      defaultZone: http://172.20.0.3:8761/eureka
 
 
 

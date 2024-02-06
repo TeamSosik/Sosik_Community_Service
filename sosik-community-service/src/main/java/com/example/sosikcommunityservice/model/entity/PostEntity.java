@@ -2,14 +2,13 @@ package com.example.sosikcommunityservice.model.entity;
 
 import com.example.sosikcommunityservice.dto.request.RequestCreatePost;
 import com.example.sosikcommunityservice.dto.request.RequestUpdatePost;
-import com.example.sosikcommunityservice.dto.response.*;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -17,18 +16,9 @@ import java.util.stream.Collectors;
 @Table(
         name = "community",
         indexes = {
-                @Index(
-                        name = "idx_community_title", columnList = "title", unique = false
-                ),
-                @Index(
-                        name = "idx_community_content", columnList = "content", unique = false
-                ),
-                @Index(
-                        name = "idx_community_writer", columnList = "memberId", unique = false
-                )
+                @Index(name = "idx_community_title", columnList = "title", unique = false)
         }
 )
-
 public class PostEntity extends AuditingFields {
 
     @Id
