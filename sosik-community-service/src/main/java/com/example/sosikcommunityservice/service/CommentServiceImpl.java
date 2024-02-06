@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity commentEntity = CommentEntity.create(commentDTO, postEntity, memberId);
         commentRepository.save(commentEntity);
 
-        String finalUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:9000/members/v1/"+memberId)
+        String finalUrl = UriComponentsBuilder.fromHttpUrl("http://43.200.224.252:9000/members/v1/"+memberId)
                 .build()
                 .toUriString();
         WebClient webClient = WebClient.create();

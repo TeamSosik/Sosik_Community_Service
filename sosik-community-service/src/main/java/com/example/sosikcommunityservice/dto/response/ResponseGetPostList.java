@@ -19,7 +19,7 @@ public record ResponseGetPostList(
         LocalDateTime createdAt
 ) {
     public static ResponseGetPostList responseGetPostList(PostEntity postEntity){
-        String finalUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:9000/members/v1/"+postEntity.getMemberId())
+        String finalUrl = UriComponentsBuilder.fromHttpUrl("http://43.200.224.252:9000/members/v1/"+postEntity.getMemberId())
                 .build()
                 .toUriString();
         WebClient webClient = WebClient.create();
